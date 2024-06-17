@@ -31,11 +31,11 @@ class AuthService {
   }
   async login({ email, password }) {
     try {
-      const res = await this.account.createEmailSession(email, password);
+      const res = await this.account.createEmailPasswordSession(email, password);
       console.log("login::auth.js::res ", res);
       return res;
     } catch (error) {
-      throw error;
+      console.log(error);
     }
   }
 
@@ -50,7 +50,7 @@ class AuthService {
   }
   async logout() {
     try {
-      await this.account.deleteSession();
+      await this.account.deleteSessions();
     } catch (error) {
       throw error;
     }

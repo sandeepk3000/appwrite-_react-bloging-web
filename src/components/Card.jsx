@@ -1,48 +1,34 @@
 import React from "react";
-
-function Card({category,title,content="",featuredImage}) {
+import parse from 'html-react-parser'
+import serive from "../appwrite/config";
+import { Link } from "react-router-dom";
+function Card({ category, title, content = "", coverImage, className, type, isEdit = false,$id }) {
+console.log(category, title, content , coverImage, className);
   return (
-    <li className="relative flex flex-col sm:flex-row xl:flex-col items-start">
-      <div className="order-1 sm:ml-6 xl:ml-0">
-        <h3 className="mb-1 text-slate-900 font-semibold">
-          <span className="mb-1 block text-sm leading-6 text-indigo-500">
-           {category}
-          </span>{title}
-        </h3>
-        <div className="prose prose-slate prose-sm text-slate-600">
-          <p>
-            {content.length > 30 ? content.slice(0,29) + " ....":content}
-          </p>
+    <div className={`${className} relative `}>
+      {isEdit && (
+        <Link to={`/editArticle/${$id}`}>
+        <svg className="feather feather-edit absolute z-10 left-5 opacity-35 text-white hover:opacity-100 cursor-pointer top-3" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+    </Link>
+      )}
+      <img src={serive.getFilePreview(coverImage)} className={type !== "main" ? "block md:hidden lg:block rounded-md h-64 md:h-32 m-4 md:m-0" : "rounded-md object-cover w-full h-64"} />
+      <div className="bg-white rounded px-4">
+        <span className={type !== "main" ? "text-green-700 text-sm hidden md:block" : "text-green-700 text-sm hidden md:block mt-4"}> {category}</span>
+        <div className={type !== "main" ? "md:mt-0 text-gray-800 font-semibold text-xl mb-2" : 'text-gray-800 text-4xl font-bold mt-2 mb-2 leading-tight'}>
+          {title}
         </div>
-        <a
-          className="group inline-flex items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 focus:ring-slate-500 mt-6"
-          href=""
-        >
-          Learn more
-          <svg
-            className="overflow-visible ml-3 text-slate-300 group-hover:text-slate-400"
-            width="3"
-            height="6"
-            viewBox="0 0 3 6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M0 0L3 3L0 6" />
-          </svg>
-        </a>
+        <p className={type !== "main" ? "block md:hidden p-2 pl-0 pt-1 text-sm text-gray-600" : ' text-gray-600 mb-4'}>
+          {parse(content)}
+        </p>
       </div>
-      <img
-        src={featuredImage}
-        alt=""
-        className="mb-6 shadow-md rounded-lg bg-slate-50 w-full sm:w-[17rem] sm:mb-0 xl:mb-6 xl:w-full"
-        width="1216"
-        height="640"
-      />
-    </li>
-  );
+      <Link to={`article/${$id}` } >
+      <div className="absolute w-full h-full top-0 left-0">
+
+      </div>
+      </Link>
+    </div>
+  )
+
 }
 
 export default Card;

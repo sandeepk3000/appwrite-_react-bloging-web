@@ -1,35 +1,46 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from "react-hook-form"
 import { Button, Input, RTE, Select } from "./index"
+import authService from '../appwrite/auth'
+import Service from '../appwrite/config'
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 function ArticleForm({ article }) {
+  console.log("arti", article);
   const { register, handleSubmit, setValue, watch, getValues, control } = useForm({
     defaultValues:
     {
       title: article?.title || "",
       content: article?.content || "",
-      tags: article?.tags || [],
+      tags: "",
       category: article?.category || "",
-      status: article?.status || "active"
+      status: article?.status || "active",
+      slug: article?.$id || ""
     }
 
   })
-  const [image, setImage] = useState(article ? appwriteService.getFilePreview(article.coverImage) : null)
-  const [tags, setTags] = useState([])
+  const [image, setImage] = useState(article ? Service.getFilePreview(article.coverImage) : null)
+  const [tags, setTags] = useState(article?.tags || [])
+  const [loader, setLoader] = useState(false)
+  console.log(tags);
+  const navigate = useNavigate()
+  const userData = useSelector((state) => state.user.userData)
+  console.log(userData);
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      // if (name === "image") {
-      //   console.log(value, name);
-      //   const file = value.image[0]
-      //   console.log("file", file);
-      //   if (file) {
-      //     const reader = new FileReader()
-      //     reader.onload = (e) => {
-      //       console.log(e.target.result);
-      //       setImage(e.target.result)
-      //     }
-      //     reader.readAsDataURL(file);
-      //   }
-      // }
+      if (name === "image") {
+        console.log(value, name);
+        const file = value.image[0]
+        console.log("file", file);
+        if (file) {
+          const reader = new FileReader()
+          reader.onload = (e) => {
+            console.log(e.target.result);
+            setImage(e.target.result)
+          }
+          reader.readAsDataURL(file);
+        }
+      }
     })
     return () => subscription.unsubscribe();
   }, [watch, setValue])
@@ -42,8 +53,35 @@ function ArticleForm({ article }) {
   const handleTag = (value) => {
     setTags(tags.filter((tag) => tag !== value))
   }
-  const submit = (data) => {
-    console.log(data);
+  const submit = async (data) => {
+    setLoader(true)
+    console.log(data.image[0]);
+    if (article) {
+      console.log("artipar");
+      const file = data.image[0] ? await Service.uploadFile(data.image[0]) : null;
+      if (file) {
+        await Service.deleteFile(article.coverImage)
+      }
+      setValue("tags", tags)
+      const updatedArticle = await Service.updateArticle(article.$id, { ...getValues() }, file ? file.$id : undefined)
+      if (updatedArticle) {
+        setLoader(false)
+        navigate(`/article/${updatedArticle.$id}`)
+      }
+    } else {
+      console.log("upload...", data.image[0]);
+      const file = await Service.uploadFile(data.image[0])
+      if (file) {
+        setValue("tags", tags)
+        console.log(userData);
+        const createdArticle = await Service.createArticle({ ...getValues(), coverImage: file.$id, userId: userData.$id })
+        if (createdArticle) {
+          setLoader(false)
+          navigate(`/article/${createdArticle.$id}`)
+        }
+
+      }
+    }
   }
   {/* <div className="mb-6">
   <label for="exampletags" class="inline-block mb-2">Tags</label>
@@ -51,7 +89,7 @@ function ArticleForm({ article }) {
 </div> */}
 
   return (
-    <form className="w-full  flex flex-wrap" onSubmit={handleSubmit(submit)}>
+    <form className="w-full  flex flex-wrap relative" onSubmit={handleSubmit(submit)}>
       <div className="w-1/2">
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -105,11 +143,11 @@ function ArticleForm({ article }) {
             <Input
               label="Thumbnail"
               placeholder="thumbnail"
-              className="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+              className="block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-blue-500 file:py-2.5 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60 mb-4"
               type="file"
               accept="image/png, image/jpg, image/jpeg, image/gif"
               {...register("image", {
-                required: true
+                required: !article
               })}
             />
             {image && (
@@ -128,7 +166,7 @@ function ArticleForm({ article }) {
             <Select
               className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               label="CATEGORY"
-              options={["qweqw", "sdfdswfdsafasd"]}
+              options={["tech", "sport"]}
               {...register("category", {
                 required: true
               })}
@@ -138,32 +176,31 @@ function ArticleForm({ article }) {
             <Select
               className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               label="STATUS"
-              options={["qweqw", "sdfdswfdsafasd"]}
+              options={["active", "inactive"]}
               {...register("status", {
                 required: true
               })}
             />
 
           </div>
-
+          <Button type="submit" className="w-full text-white bg-orange-500 mt-4 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Compose</Button>
         </div>
       </div>
 
       <div className="w-1/2">
         <div className="w-full px-3">
-          {/* <RTE
+          <RTE
             label="Editor"
             defaultValue={getValues("content")}
             name={null}
             control={control}
-          /> */}
-          <Button type="submit"  className="w-full bg-orange-600">
-            p
-            
-          </Button>
+          />
+
         </div>
       </div>
+      {loader ? <div className="absolute w-full h-full top-0 left-0 bg-slate-300 opacity-40">
 
+      </div> : ""}
     </form>
   )
 }

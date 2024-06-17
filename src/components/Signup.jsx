@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import authService from "../appwrite/auth";
 import { login } from "../reduxStore/userSlice";
@@ -10,20 +10,24 @@ import Button from "./Button";
 function Signup() {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
-//   const naviagate = useNavigate();
+  const naviagate = useNavigate();
   const {register,handleSubmit} = useForm()
   const submit = async data => {
+    console.log(data);
     setError("");
     try {
       const res = await authService.createAccount(data);
+      console.log("res",res);
       if (res) {
         const user = await authService.getUser();
         if (user) {
-          dispatch(login());
+          console.log("user",user);
+          dispatch(login(user));
           naviagate("/");
         }
       }
     } catch (error) {
+      console.log(error);
       setError(error.message);
     }
   };

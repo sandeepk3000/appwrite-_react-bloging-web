@@ -4,7 +4,7 @@ import serive from '../../appwrite/config'
 import { Container,ArticleForm} from "../index"
 function EditPost() {
     const navigate = useNavigate()
-    const [article, setArticle] = useState()
+    const [article, setArticle] = useState(null)
     const { slug } = useParams()
     useEffect(() => {
         serive.getArticle({ slug })
@@ -12,14 +12,18 @@ function EditPost() {
                 if (data) {
                     setArticle(data)
                 } else {
-                    navigate("/")
+                    // navigate("/")
                 }
             })
     }, [navigate, slug])
+
+    console.log("Editpost",article);
     return (
-        <Container>
+       
+        article ? ( <Container>
             <ArticleForm article={article} />
-        </Container>
+        </Container>):null
+       
     )
 }
 

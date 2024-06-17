@@ -8,7 +8,7 @@ import Input from "./Input";
 import Button from "./Button"
 function Login() {
   const { register, handleSubmit } = useForm();
-//   const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [error, setError] = useState("");
 
@@ -19,7 +19,7 @@ function Login() {
       if (session) {
         const userData = await authService.getUser();
         dispatch(reduxLogin(userData));
-        // navigate("/");
+        navigate("/");
       }
     } catch (error) {
       setError(error.message);

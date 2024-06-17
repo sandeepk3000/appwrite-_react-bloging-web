@@ -1,6 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
+import {Button} from "../index"
+import { useDispatch } from "react-redux";
+import authService from "../../appwrite/auth";
+import { login, logout } from "../../reduxStore/userSlice";
 function Header() {
   const authStatus = useSelector((state) => state.user.status)
   const navItems = [
@@ -28,9 +32,19 @@ function Header() {
       name: "Compose",
       url: "/compose",
       active: authStatus
-    }
+    },
   ]
-
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const  handleLogout = async ()=>{
+    try {
+      await authService.logout()
+      dispatch(logout())
+      navigate("/login")
+    } catch (error) {
+      
+    }
+  }
   return (
     <div className="relative w-full bg-white">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
@@ -67,13 +81,14 @@ function Header() {
             ))}
           </ul>
         </div>
-        <div className="hidden lg:block">
-          <button
+        <div className="">
+         {authStatus && <Button
             type="button"
+            onClick={handleLogout}
             className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
           >
-            Button text
-          </button>
+            Logout
+          </Button>}
         </div>
         <div className="lg:hidden">
           <svg

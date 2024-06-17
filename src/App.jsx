@@ -1,15 +1,34 @@
 
-import React from "react"
+import React, { useEffect } from "react"
 
 import { Outlet } from "react-router-dom"
 import { Header, Footer } from "./components/index"
+import authService from "./appwrite/auth"
+import { useDispatch } from "react-redux"
+import { login, logout } from "./reduxStore/userSlice"
+
 function App() {
+  const dispatch = useDispatch()
+  useEffect(()=>{
+    try {
+      authService.getUser()
+      .then((userData)=>{
+        if (userData) {
+          dispatch(login({userData}))
+        }else{
+          dispatch(logout())
+        }
+      })
+    } catch (error) {
+      
+    }
+  })
   return (
-    <div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
+    <div className='min-h-screen flex flex-wrap content-between'>
       <div className='w-full block'>
         <Header />
         <main>
-        TODO:  <Outlet />
+          <Outlet />
         </main>
         <Footer />
       </div>

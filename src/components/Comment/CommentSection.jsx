@@ -1,87 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {Button,Comment,TextArtea} from "../index"
+import Serive from '../../appwrite/config'
+import { useSelector } from 'react-redux'
 
-function CommentSection() {
+function CommentSection({article}) {
 
     const { register, handleSubmit } = useForm()
     const [error, setError] = useState()
-    const [comments, setCommets] = useState([{
-        text: "I disagree with this point.",
-        author: "autherId",
-        likes: 2,
-        likedBy: [],
-        status: 'published',
-        replies: [
-            {
-                text: "Can you explain why?",
-                author: "autherId",
-                parentComment: "", // Replace with the actual ID of the parent comment
-                likes: 0,
-                status: 'published',
-                replies: [
-                    {
-                        text: "Can you explain why?",
-                        author: "autherId",
-                        parentComment: "", // Replace with the actual ID of the parent comment
-                        likes: 0,
-                        status: 'published'
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        text: "I disagree with this point.dfsdfsdfsdfasdfsadfsadfsadfsdfsdfasdfasdfsadfsdafsdfsdafadsfsafsdf",
-        author: "autherId",
-        likes: 2,
-        likedBy: [],
-        status: 'published',
-        replies: [
-            {
-                text: "Can you explain why?",
-                author: "autherId",
-                parentComment: "", // Replace with the actual ID of the parent comment
-                likes: 0,
-                status: 'published',
-                replies: [
-                    {
-                        text: "Can you explain why?",
-                        author: "autherId",
-                        parentComment: "", // Replace with the actual ID of the parent comment
-                        likes: 0,
-                        status: 'published',
-                        replies: [
-                            {
-                                text: "Can you explain why?",
-                                author: "autherId",
-                                parentComment: "", // Replace with the actual ID of the parent comment
-                                likes: 0,
-                                status: 'published',
-                                replies: [
-                                    {
-                                        text: "Can you explain why?",
-                                        author: "autherId",
-                                        parentComment: "", // Replace with the actual ID of the parent comment
-                                        likes: 0,
-                                        status: 'published'
-                                    }
-                                ]
-                            }
-                        ]
-
-                    }
-                ]
-            }
-        ]
-    }
-    ])
-    const submit = (data) => {
+    const [comments, setCommets] = useState(article?.comments || [])
+    const userData = useSelector(state => state.user.userData)
+    const submit = async (data) => {
         setError("")
         try {
-            // const commentRes = await postMessage()
-            if (true) {
-                // setCommet(getCommet())
+            const commentRes = await Serive.createComment({author:userData.$id,...data})
+            if (commentRes) {
+                // const created
+                // setCommets()
             }
         } catch (error) {
             setError(error.message)

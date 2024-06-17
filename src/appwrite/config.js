@@ -23,12 +23,13 @@ class Service {
     tags,
     category,
     status,
-    publishedDate
+    userId,
+    slug
   }) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseId,
-        conf.appwriteCollectionId,
+        conf.appwriteArticleCollectionId,
         slug,
         {
           title,
@@ -36,31 +37,89 @@ class Service {
           coverImage,
           author,
           tags,
-          categories,
+          category,
           status,
-          publishedDate
+          userId
+
         }
       );
     } catch (error) {
       throw error;
     }
   }
+  async createUserProfile({ username, coverImage, userId }) {
+    try {
+      return await this.databases.createDocument(conf.appwriteDatabaseId, conf.appwriteProfileCollectionId, ID.unique(), {
+        username,
+        userId,
+        coverImage
+      })
+    } catch (error) {
+      throw error
+    }
+  }
 
-  async updateArticle({}) {
+  async updateUserProfile({ username, coverImage, slug }) {
+    try {
+      return await this.databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteProfileCollectionId, slug, {
+        username,
+        coverImage
+      })
+    } catch (error) {
+
+    }
+  }
+  async getUserProfile({ queries = [] }) {
+    try {
+      return await this.databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteProfileCollectionId, queries)
+    } catch (error) {
+      throw error
+    }
+  }
+  async createComment({ author, text }) {
+    try {
+      return await this.databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCommentCollectionId, ID.unique(), {
+        author,
+        text
+      })
+    } catch (error) {
+      throw error
+    }
+  }
+  async updateComment({ likes, likesBy, status, replies, slug, text }) {
+    try {
+      return await this.databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteProfileCollectionId, slug, {
+        text,
+        likes,
+        likesBy,
+        replies,
+        status
+      })
+    } catch (error) {
+      throw error
+    }
+  }
+  async updateArticle(slug, { title, content,
+    coverImage,
+    tags,
+    category,
+    status, comments = [],
+    likes = 0,
+    likesBy = [],
+    views, }) {
     try {
       return await this.databases.updateDocument(
         conf.appwriteDatabaseId,
-        conf.appwriteCollectionId,
+        conf.appwriteArticleCollectionId,
         slug,
         {
+          likesBy,
           comments,
-          likes,
-          views,
           title,
           content,
           coverImage,
           tags,
-          categories,
+          category,
           status
         }
       );
@@ -82,18 +141,18 @@ class Service {
     try {
       return await this.databases.deleteDocument(
         conf.appwriteDatabaseId,
-        conf.appwriteCollectionId,
+        conf.appwriteArticleCollectionId,
         slug
       );
     } catch (error) {
       throw error;
     }
   }
-  async getArticle({ slug}) {
+  async getArticle({ slug }) {
     try {
       const article = await this.databases.getDocument(
         conf.appwriteDatabaseId,
-        conf.appwriteCollectionId,
+        conf.appwriteArticleCollectionId,
         slug
       );
       return article;
@@ -101,21 +160,25 @@ class Service {
       return false;
     }
   }
-  async getArticles({ queries = [Query.equal("status", "active")] }) {
+  async getArticles({ queries = [Query.equal("status", "active")], limit, offset }) {
+    console.log(limit,offset);
     try {
       const articles = await this.databases.listDocuments(
         conf.appwriteDatabaseId,
-        conf.appwriteCollectionId,
-        queries
+        conf.appwriteArticleCollectionId,
+        queries,
+
       );
+      console.log(articles);
       return articles;
     } catch (error) {
       return false;
     }
   }
-  async uploadFile({ file }) {
+  async uploadFile(file) {
+    console.log(file);
     try {
-      const res = await this.storage.updateFile(
+      const res = await this.storage.createFile(
         conf.appwriteBucketId,
         ID.unique(),
         file
@@ -126,7 +189,7 @@ class Service {
     }
   }
 
-  async deleteFile({ fileId }) {
+  async deleteFile(fileId) {
     try {
       return await this.storage.deleteFile(conf.appwriteBucketId, fileId);
     } catch (error) {
@@ -134,8 +197,8 @@ class Service {
     }
   }
 
-  async getFilePreview({ fileId }) {
-    const res = await this.storage.getFilePreview(
+  getFilePreview(fileId) {
+    const res = this.storage.getFilePreview(
       conf.appwriteBucketId,
       fileId
     );
