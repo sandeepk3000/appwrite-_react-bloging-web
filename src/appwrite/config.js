@@ -76,11 +76,13 @@ class Service {
       throw error
     }
   }
-  async createComment({ author, text }) {
+  async createComment({ author, text, articleId ,replies = []}) {
     try {
       return await this.databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCommentCollectionId, ID.unique(), {
         author,
-        text
+        articleId,
+        text,
+        replies
       })
     } catch (error) {
       throw error
@@ -95,6 +97,13 @@ class Service {
         replies,
         status
       })
+    } catch (error) {
+      throw error
+    }
+  }
+  async getComments(queries) {
+    try {
+      return await this.databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteProfileCollectionId, queries)
     } catch (error) {
       throw error
     }
@@ -161,7 +170,7 @@ class Service {
     }
   }
   async getArticles({ queries = [Query.equal("status", "active")], limit, offset }) {
-    console.log(limit,offset);
+    console.log(limit, offset);
     try {
       const articles = await this.databases.listDocuments(
         conf.appwriteDatabaseId,

@@ -51,7 +51,7 @@ function Article() {
                     <div className="mb-4">
                         {parse(article.content)}
                     </div>
-                    <CommentSection />
+                    <CommentSection article={article}  />
                 </article>
             </div>
         </main >
