@@ -65,7 +65,7 @@ function Header() {
           </span>
           <span className="font-bold">DevUI</span>
         </div>
-        <div className="hidden grow items-start lg:flex">
+        <div className="grow items-start lg:flex">
           <ul className="ml-12 inline-flex space-x-8">
             {navItems.map((item) => (
               item.active && (
