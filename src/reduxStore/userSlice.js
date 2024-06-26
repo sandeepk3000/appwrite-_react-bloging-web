@@ -8,12 +8,12 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      state.status = true, 
+      state.status = true
       state.userData = action.payload.userData;
     },
     logout: (state, action) => {
-      state.status = false,
-       state.userData = null;
+      state.status = false
+      state.userData = null;
     }
   }
 });

@@ -60,24 +60,29 @@ function ArticleForm({ article }) {
       console.log("artipar");
       const file = data.image[0] ? await Service.uploadFile(data.image[0]) : null;
       if (file) {
-        await Service.deleteFile(article.coverImage)
+        console.log("file exist...",file);
+        console.log(article.coverImage);
+        const resFile =  await Service.deleteFilePost(article.coverImage)
+        console.log("file exist...",resFile);
       }
       setValue("tags", tags)
-      const updatedArticle = await Service.updateArticle(article.$id, { ...getValues() }, file ? file.$id : undefined)
+      const updatedArticle = await Service.updateArticle(article?.$id, { ...getValues() , coverImage: file ? file?.$id : undefined})
       if (updatedArticle) {
+        console.log("updatedArticle",updatedArticle);
         setLoader(false)
-        navigate(`/article/${updatedArticle.$id}`)
+        navigate(`/article/${updatedArticle?.$id}`)
       }
     } else {
       console.log("upload...", data.image[0]);
       const file = await Service.uploadFile(data.image[0])
       if (file) {
         setValue("tags", tags)
+        console.log("firstupload",file);
         console.log(userData);
-        const createdArticle = await Service.createArticle({ ...getValues(), coverImage: file.$id, userId: userData.$id })
+        const createdArticle = await Service.createArticle({ ...getValues(), coverImage: file?.$id, userId: userData?.$id })
         if (createdArticle) {
           setLoader(false)
-          navigate(`/article/${createdArticle.$id}`)
+          navigate(`/article/${createdArticle?.$id}`)
         }
 
       }
@@ -89,12 +94,12 @@ function ArticleForm({ article }) {
 </div> */}
 
   return (
-    <form className="w-full  flex flex-wrap relative" onSubmit={handleSubmit(submit)}>
-      <div className="w-1/2">
+    <form className="w-full  flex flex-wrap relative p-4 md:p-0"  onSubmit={handleSubmit(submit)}>
+      <div className="w-full lg:w-1/2">
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <Input
-              label="Title"
+              label="TITLE"
               placeholder="Sandeep"
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name"
               type="text"
@@ -107,7 +112,7 @@ function ArticleForm({ article }) {
           <div className="w-full md:w-1/2 px-3">
 
             <Input
-              label="slug"
+              label="SLUG"
               placeholder="hNJF#F1794%r"
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name"
               type="text"
@@ -120,7 +125,7 @@ function ArticleForm({ article }) {
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
             <Input
-              label="Tags"
+              label="TAGS"
               placeholder="tags"
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name"
               type="text"
@@ -138,10 +143,10 @@ function ArticleForm({ article }) {
             </span>))}
           </div>
         </div>
-        <div className="flex flex-wrap -mx-3 mb-6" >
+        <div className="flex flex-wrap mx-3 mb-6" >
           <div className="w-full px-3">
             <Input
-              label="Thumbnail"
+              label="THUMBNAIL"
               placeholder="thumbnail"
               className="block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-blue-500 file:py-2.5 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60 mb-4"
               type="file"
@@ -166,7 +171,7 @@ function ArticleForm({ article }) {
             <Select
               className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               label="CATEGORY"
-              options={["tech", "sport"]}
+              options={["tech", "sport","health","food","education","job"]}
               {...register("category", {
                 required: true
               })}
@@ -187,7 +192,7 @@ function ArticleForm({ article }) {
         </div>
       </div>
 
-      <div className="w-1/2">
+      <div className=" w-full lg:w-1/2 ">
         <div className="w-full px-3">
           <RTE
             label="Editor"

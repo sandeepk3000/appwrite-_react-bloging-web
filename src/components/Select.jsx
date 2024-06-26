@@ -2,7 +2,7 @@ import React, { forwardRef, useId } from 'react'
 function Select({ label, className, options, ...props }, ref) {
   const id = useId()
   return (
-    <> {label && (<label for={id} className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"></label>)}
+    <> {label && (<label for={id} className="block mb-2 text-sm font-medium text-gray-900">{label}</label>)}
       <select
         id={id}
         ref={ref}

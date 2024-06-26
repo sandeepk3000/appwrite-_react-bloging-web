@@ -30,7 +30,7 @@ function Home() {
 
 
   const loopArticles = (articles = [], className,start,end) => {
-    return articles.slice(start,end).map((article) => (
+    return articles?.slice(start,end).map((article) => (
       <Card isEdit={userData?.$id === article.userId} key={article.$id} className={className} {...article} />
     ))
   }
@@ -38,7 +38,7 @@ function Home() {
   const loopSubMainArticles = (articles) => {
     return
   }
-
+console.log();
   return (
     articles.length > 0 && (
       <Container>
@@ -46,10 +46,10 @@ function Home() {
           < div className="flex flex-wrap md:flex-nowrap space-x-0 md:space-x-6 mb-16" >
             <Card className="mb-4 lg:mb-0  p-4 lg:p-0 w-full md:w-4/7 relative rounded block" type={"main"} isEdit={userData?.$id === articles[0].userId} {...articles[0]} />
             <div className="w-full md:w-4/7">
-              {loopArticles(articles, "rounded w-full flex flex-col md:flex-row mb-10",1,4)}
+              {loopArticles(articles, "flex flex-col md:flex-row border-solid border-b-2 mb-3 pb-3 border-b-gray-400",1,4)}
             </div>
           </div >
-          {loopArticles(articles, "rounded w-full flex flex-col md:flex-row mb-10",2,4)}
+          {loopArticles(articles, "flex flex-col md:flex-row border-solid border-b-2 mb-3 pb-3 border-b-gray-400",4,articles.length)}
         </main >
       </Container>
 

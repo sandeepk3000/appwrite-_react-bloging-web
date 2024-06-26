@@ -19,7 +19,6 @@ class Service {
     title,
     content,
     coverImage,
-    author,
     tags,
     category,
     status,
@@ -35,7 +34,6 @@ class Service {
           title,
           content,
           coverImage,
-          author,
           tags,
           category,
           status,
@@ -112,18 +110,13 @@ class Service {
     coverImage,
     tags,
     category,
-    status, comments = [],
-    likes = 0,
-    likesBy = [],
-    views, }) {
+    status }) {
     try {
       return await this.databases.updateDocument(
         conf.appwriteDatabaseId,
         conf.appwriteArticleCollectionId,
         slug,
         {
-          likesBy,
-          comments,
           title,
           content,
           coverImage,
@@ -169,8 +162,9 @@ class Service {
       return false;
     }
   }
-  async getArticles({ queries = [Query.equal("status", "active")], limit, offset }) {
-    console.log(limit, offset);
+
+  async getArticles({ queries , limit, offset }) {
+    console.log(queries,limit, offset);
     try {
       const articles = await this.databases.listDocuments(
         conf.appwriteDatabaseId,
@@ -198,10 +192,12 @@ class Service {
     }
   }
 
-  async deleteFile(fileId) {
+  async deleteFilePost(fileId) {
     try {
-      return await this.storage.deleteFile(conf.appwriteBucketId, fileId);
+      console.log("fileid",fileId);
+      return await this.storage.deleteFile(conf.appwriteBucketId,fileId)
     } catch (error) {
+      console.log(error);
       return false;
     }
   }

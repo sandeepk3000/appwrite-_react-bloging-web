@@ -16,7 +16,7 @@ console.log("djfksdjfksdjafkjasdkfjsakdjfksadjfkasd");
         }
         setLoader(false)
     },[navigate,authStatus,authentication])
-    return loader ? <h1>Loading...</h1> : <>{children}</>
+    return loader ? <h1 className='text-center text-red-500'>Loading...</h1> : <>{children}</>
 }
 
 export default AuthLayout
