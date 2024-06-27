@@ -44,6 +44,7 @@ function Header() {
     try {
       await authService.logout()
       dispatch(logout())
+      setOpenNav(false)
       navigate("/login")
     } catch (error) {
 
@@ -52,7 +53,7 @@ function Header() {
   return (
     <div className="w-full bg-white">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
-        <div className="w-full flex items-center">
+        <div className="w-full flex items-center sm:justify-between">
           <div className="inline-flex items-center space-x-2">
             <span>
               <svg
@@ -72,13 +73,14 @@ function Header() {
               Sandeep.dev
             </span>
           </div>
-          <div className={`row items-start z-50 flex fixed translate-x-[${openNav ?"0":"-100%"}]  transition sm:relative top-0 left-0 h-full bg-red-500 sm:bg-white w-40 center sm:justify-center`}>
+          <div className={`row items-start z-50 flex fixed translate-x-[${openNav ? "0":"-100%"}] sm:translate-x-0 transition sm:relative top-0 left-0 h-full bg-red-500 sm:bg-white w-40 center sm:justify-center`}>
 
-            <ul className="sm:ml-12 sm:inline-flex items-center w-full py-6  flex-col sm:flex-row justify-center center sm:space-x-8 gap-4">
+            <ul className="sm:inline-flex items-center flex w-full py-6  flex-col sm:flex-row justify-center center sm:space-x-8 gap-4">
               {navItems.map((item) => (
                 item.active && (
                   <li className="text-center" key={item.name}>
                     <Link
+                    onClick={()=>setOpenNav(false)}
                       to={item.url}
                       className="text-sm  font-semibold text-gray-800 hover:text-gray-900"
                     >
@@ -87,16 +89,16 @@ function Header() {
                   </li>
                 )
               ))}
+              {
+                authStatus && <Button
+                type="button"
+                onClick={handleLogout}
+                className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+              >
+                Logout
+              </Button>
+              }
             </ul>
-          </div>
-          <div className="">
-            {authStatus && <Button
-              type="button"
-              onClick={handleLogout}
-              className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-            >
-              Logout
-            </Button>}
           </div>
         </div>
         <div className="sm:hidden text-center">

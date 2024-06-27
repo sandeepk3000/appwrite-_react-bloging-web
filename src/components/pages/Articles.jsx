@@ -23,7 +23,7 @@ function Articles() {
       <main className="mt-12">
         {articles.length > 0 && (
           articles.map((article)=>(
-            <Card className={"flex border-solid border-b-2 mb-3 pb-3 border-b-gray-400"} category={article.category} title={article.title} content={article.content} coverImage={article.coverImage}$id={article.$id} isEdit={userStatus}/>
+            <Card className={"flex flex-col md:flex-row border-solid border-b-2 mb-3 pb-3 border-b-gray-400"} category={article.category} title={article.title} content={article.content} coverImage={article.coverImage}$id={article.$id} isEdit={userStatus}/>
           ))
         )}
       </main >
