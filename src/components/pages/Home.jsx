@@ -11,7 +11,7 @@ function Home() {
   const navigate = useNavigate()
   const id = useId()
   useEffect(() => {
-    console.log("userEff");
+    
     Serive.getArticles({ limit: 10, offset })
       .then((data) => {
         console.log(data);
