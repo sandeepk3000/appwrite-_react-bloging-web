@@ -38,7 +38,7 @@ const router = createBrowserRouter([
       {
         path: "/editArticle/:slug",
         element: <AuthLayout authentication>
-          <EditPost/>
+          <EditPost />
         </AuthLayout>
       },
       {
@@ -53,9 +53,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/articles/:category",
-        element: <AuthLayout authentication>
-          <Articles />
-        </AuthLayout>
+        element: <Articles />
       }
     ]
   }
@@ -63,7 +61,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-         <RouterProvider router={router}/>
+      <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>,
 )
