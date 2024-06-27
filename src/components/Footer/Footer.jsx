@@ -12,7 +12,7 @@ function Footer() {
                         <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">COMPANY</h2>
                         <ul className="text-gray-500 dark:text-gray-400 font-medium">
                             <li className="mb-4">
-                              👋 Welcome to Sandeep.dev , where we share insights, stories, and tips on Health,Job,Education,Tech,Sports. Our mission is to inspire, inform, and engage our readers with high-quality content. Join us on this journey and stay updated with our latest posts.
+                              👋 Welcome to Sandeep.dev , where we share insights, stories, and tips on Health, Job, Education, Tech, Sports. Our mission is to inspire, inform, and engage our readers with high-quality content. Join us on this journey and stay updated with our latest posts.
                             </li>
                         </ul>
                     </div>
