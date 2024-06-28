@@ -14,7 +14,7 @@ function Card({ category, title, content = "", coverImage, className = "", type,
       )}
       <img src={serive.getFilePreview(coverImage)} className={type !== "main" ? "block  lg:block rounded-md h-64 md:h-32 m-4 md:m-0" : "rounded-md md:max-h-96 w-full h-64"} />
       <div className="bg-white rounded px-4">
-        <span className={type !== "main" ? "text-green-700 text-sm hidden md:block" : "text-green-700 text-sm hidden md:block mt-4"}> {category}</span>
+        <span className={type !== "main" ? "text-red-500 text-sm capitalize " : "text-red-500 text-sm capitalize mt-4"}> {category}</span>
         <div className={type !== "main" ? "md:mt-0 text-gray-800 font-semibold text-xl mb-2" : 'text-gray-800 text-4xl font-bold mt-2 mb-2 leading-tight'}>
           {title}
         </div>

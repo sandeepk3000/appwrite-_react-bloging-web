@@ -35,7 +35,7 @@ function Header() {
     {
       name: "Compose",
       url: "/compose",
-      active: authStatus
+      active: !authStatus
     },
   ]
   const dispatch = useDispatch()
@@ -76,7 +76,7 @@ function Header() {
               Sandeep.dev
             </span>
           </div>
-          <div className={`row items-start z-50 flex fixed  sm:translate-x-0 transition sm:relative top-0 left-0 h-full bg-red-500 sm:bg-white w-40 center sm:justify-center`} style={translateStyle}>
+          <div className={`row items-start z-50 flex fixed  sm:translate-x-0 transition sm:relative top-0 left-0 h-full shadow-xl bg-white sm:shadow-none w-40 center sm:justify-center`} style={translateStyle}>
 
             <ul className="sm:inline-flex items-center flex w-full py-6  flex-col sm:flex-row justify-center center sm:space-x-8 gap-4">
               {navItems.map((item) => (
@@ -93,7 +93,7 @@ function Header() {
                 )
               ))}
               {
-                authStatus && <Button
+                !authStatus && <Button
                 type="button"
                 onClick={handleLogout}
                 className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"

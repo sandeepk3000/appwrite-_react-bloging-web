@@ -14,7 +14,7 @@ function ArticleForm({ article }) {
       content: article?.content || "",
       tags: "",
       category: article?.category || "",
-      status: article?.status || "active",
+      status: article?.status || "",
       slug: article?.$id || ""
     }
 
@@ -44,8 +44,14 @@ function ArticleForm({ article }) {
     })
     return () => subscription.unsubscribe();
   }, [watch, setValue])
-  const handleKeyPress = (event) => {
+  const handleInputKeyDown = (event) => {
     if (event.key === "Enter" && !tags.includes(getValues("tags").trim()) && getValues("tags").trim().length >= 4) {
+      setTags((prev) => [...prev, getValues("tags").trim()])
+      event.target.value = ""
+    }
+  }
+  const handleInputBlur = (event) => {
+    if (!tags.includes(getValues("tags").trim()) && getValues("tags").trim().length >= 4) {
       setTags((prev) => [...prev, getValues("tags").trim()])
       event.target.value = ""
     }
@@ -99,8 +105,9 @@ function ArticleForm({ article }) {
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <Input
-              label="TITLE"
-              placeholder="Sandeep"
+              label="TITLE*"
+              placeholder="title"
+              maxLength="80"
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name"
               type="text"
               {...register("title", {
@@ -108,18 +115,22 @@ function ArticleForm({ article }) {
               })}
             />
             {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
+          <div className="mt-0 float-right">{watch("title").length}/80</div>
           </div>
           <div className="w-full md:w-1/2 px-3">
 
             <Input
-              label="SLUG"
-              placeholder="hNJF#F1794%r"
+              label="UNIQUE ID*"
+              placeholder="unique id"
+              maxLength="12"
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name"
               type="text"
               {...register("slug", {
                 required: true,
+                
               })}
             />
+            <div className="mt-0 float-right">{watch("slug").length}/12</div>
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
@@ -129,7 +140,8 @@ function ArticleForm({ article }) {
               placeholder="tags"
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name"
               type="text"
-              onKeyPress={handleKeyPress}
+              onKeyPress={handleInputKeyDown}
+              onBlur={handleInputBlur}
               {...register("tags")}
             />
             {tags.length > 0 && tags.map((tag) => (<span id="badge-dismiss-default" key={tag} className="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-blue-800 bg-blue-100 rounded dark:bg-blue-900 dark:text-blue-300 m-2">
@@ -146,7 +158,7 @@ function ArticleForm({ article }) {
         <div className="flex flex-wrap mx-3 mb-6" >
           <div className="w-full px-3">
             <Input
-              label="THUMBNAIL"
+              label="THUMBNAIL*"
               placeholder="thumbnail"
               className="block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-blue-500 file:py-2.5 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60 mb-4"
               type="file"
@@ -170,8 +182,8 @@ function ArticleForm({ article }) {
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <Select
               className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              label="CATEGORY"
-              options={["tech", "sport","health","food","education","job"]}
+              label="CATEGORY*"
+              options={["CATEGORY","tech", "sport","health","food","education","job"]}
               {...register("category", {
                 required: true
               })}
@@ -180,8 +192,8 @@ function ArticleForm({ article }) {
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <Select
               className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              label="STATUS"
-              options={["active", "inactive"]}
+              label="STATUS*"
+              options={["STATUS","active", "inactive"]}
               {...register("status", {
                 required: true
               })}
@@ -195,7 +207,7 @@ function ArticleForm({ article }) {
       <div className=" w-full lg:w-1/2 ">
         <div className="w-full px-3">
           <RTE
-            label="Editor"
+            label="CONTENT*"
             defaultValue={getValues("content")}
             name={null}
             control={control}

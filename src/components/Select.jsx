@@ -9,8 +9,8 @@ function Select({ label, className, options, ...props }, ref) {
         className={`${className}`}
         {...props}
       >
-        {options?.map((option) => (
-          <option key={option} value={option}>{option}</option>
+        {options?.map((option,i) => (
+          <option key={option} value={i === 0 ? "":option}>{option}</option>
         ))}
       </select>
     </>
