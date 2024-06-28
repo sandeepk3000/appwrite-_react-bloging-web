@@ -115,7 +115,7 @@ function ArticleForm({ article }) {
               })}
             />
             {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
-          <div className="mt-0 float-right">{watch("title").length}/80</div>
+          
           </div>
           <div className="w-full md:w-1/2 px-3">
 
@@ -130,7 +130,7 @@ function ArticleForm({ article }) {
                 
               })}
             />
-            <div className="mt-0 float-right">{watch("slug").length}/12</div>
+           
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
