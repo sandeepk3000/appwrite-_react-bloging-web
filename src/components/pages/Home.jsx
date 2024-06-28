@@ -43,9 +43,9 @@ console.log();
     articles.length > 0 && (
       <Container>
         <main className="mt-12">
-          < div className="flex flex-wrap 2xl:flex-nowrap space-x-0 md:space-x-6 mb-16" >
-            <Card className="mb-4 lg:mb-0 max-w-[650px] mx-auto  p-4 lg:p-0 w-full  relative rounded block" type={"main"} isEdit={userData?.$id === articles[0].userId} {...articles[0]} />
-            <div className="w-full">
+          < div className="flex flex-wrap md:flex-nowrap space-x-0 md:space-x-6 mb-16" >
+            <Card className="mb-4 lg:mb-0  p-4 lg:p-0 w-full md:w-4/7 relative rounded block" type={"main"} isEdit={userData?.$id === articles[0].userId} {...articles[0]} />
+            <div className="w-full md:w-4/7">
               {loopArticles(articles, "flex flex-col md:flex-row border-solid border-b-2 mb-3 pb-3 border-b-gray-400",1,4)}
             </div>
           </div >
