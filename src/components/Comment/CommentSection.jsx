@@ -39,12 +39,12 @@ function CommentSection({ article }) {
                 console.log("effe", data);
             })
     })
-    const handleReply = (parentCommentId,author) => {
-        console.log("handlReply",parentCommentId,author);
+    const handleReply = (parentCommentId, author) => {
+        console.log("handlReply", parentCommentId, author);
 
         const filteredArray = comments.map((comment) => {
             if (comment.author === parentCommentId) {
-                comment.replies.push({text:"reply",author:author,replies:[],parentComment:parentCommentId})
+                comment.replies.push({ text: "reply", author: author, replies: [], parentComment: parentCommentId })
             }
 
             return comment
@@ -74,7 +74,7 @@ function CommentSection({ article }) {
                         className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
                         placeholder="Write a comment..."
                         rows="6"
-                        {...register("comment",{
+                        {...register("comment", {
                             required: true,
                         })}
                     />
