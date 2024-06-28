@@ -43,9 +43,9 @@ const router = createBrowserRouter([
       },
       {
         path: "/compose",
-        element: 
-          <AddPost />
-        
+        element: <AuthLayout authentication>
+           <AddPost />
+        </AuthLayout>         
       },
       {
         path: "/article/:slug",
